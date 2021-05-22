@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2021-04-30T16:00:47Z</date>
+    <groups>
+        <group>
+            <name>Templates/Applications</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template App TeamSpeak 3</template>
+            <name>Template App TeamSpeak 3</name>
+            <groups>
+                <group>
+                    <name>Templates/Applications</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>TeamSpeak 3 Server</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>TS3 Full XML</name>
+                    <type>EXTERNAL</type>
+                    <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    <history>0</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>TS3 Instance Build</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.build</key>
+                    <delay>0</delay>
+                    <description>The build version of the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/version/build)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{change()}=1</expression>
+                            <name>TS3 Instance Build version changed ({ITEM.LASTVALUE} =&gt; {ITEM.VALUE})</name>
+                            <priority>INFO</priority>
+                            <description>The build version of the TeamSpeak instance changed. This usually happens sometimes after an upgrade of the TeamSpeak instance.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Instance Received Traffic (total)</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.bytes_received_total</key>
+                    <delay>0</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>bytes</units>
+                    <description>The total received traffic of the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/hostinfo/bytes_received_total)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 Instance Sent Traffic (total)</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.bytes_sent_total</key>
+                    <delay>0</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>bytes</units>
+                    <description>The total sent traffic of the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/hostinfo/bytes_sent_total)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 Instance Database Version</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.database_version</key>
+                    <delay>0</delay>
+                    <description>The TeamSpeak database version, which describes the version of it's schema.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/instanceinfo/database_version)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{change()}=1</expression>
+                            <name>TS3 Instance Database version changed ({ITEM.LASTVALUE} =&gt; {ITEM.VALUE})</name>
+                            <priority>INFO</priority>
+                            <description>The database version of the TeamSpeak instance changed. This usually happens sometimes after an upgrade of the TeamSpeak instance.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Instance Filetransfer Port</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.filetransfer_port</key>
+                    <delay>0</delay>
+                    <description>The filetransfer port of the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/instanceinfo/filetransfer_port)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 Instance IP Bindings</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.ipbindings</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>The binded IP addresses of the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/bindinglist)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{change()}=1</expression>
+                            <name>TS3 Instance IP Bindings changed</name>
+                            <priority>INFO</priority>
+                            <description>The IP bindings of the TeamSpeak instance changed. This usually happens after adding new IP addresses to the binding configuration or after migrating the TeamSpeak instance to a different host system.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Instance Maximum Total Download Bandwidth</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.max_download_total_bandwidth</key>
+                    <delay>0</delay>
+                    <units>bytes</units>
+                    <description>The maximum total download bandwidth, which can be used by all virtual TeamSpeak servers.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/instanceinfo/max_download_total_bandwidth)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 Instance Maximum Total Upload Bandwidth</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.max_upload_total_bandwidth</key>
+                    <delay>0</delay>
+                    <units>bytes</units>
+                    <description>The maximum total upload bandwidth, which can be used by all virtual TeamSpeak servers.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/instanceinfo/max_upload_total_bandwidth)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 Instance Pending Connections per IP Address</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.pending_connections_per_ip</key>
+                    <delay>0</delay>
+                    <units>connections</units>
+                    <description>The amount of clients, which can connect from the same IP address. 0 means unlimited. A too low value might block other valid users.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/instanceinfo/pending_connections_per_ip)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 Instance Permissions Version</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.permissions_version</key>
+                    <delay>0</delay>
+                    <description>The TeamSpeak permissions version, which describes the version of it's schema.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/instanceinfo/permissions_version)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{change()}=1</expression>
+                            <name>TS3 Instance Permission version changed ({ITEM.LASTVALUE} =&gt; {ITEM.VALUE})</name>
+                            <priority>INFO</priority>
+                            <description>The permission version of the TeamSpeak instance changed. This usually happens sometimes after an upgrade of the TeamSpeak instance.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Instance Platform</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.platform</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>The platform, on which the TeamSpeak instance is running on.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/version/platform)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{change()}=1</expression>
+                            <name>TS3 Instance Platform changed ({ITEM.LASTVALUE} =&gt; {ITEM.VALUE})</name>
+                            <priority>INFO</priority>
+                            <description>The platform of the TeamSpeak instance changed. This usually only happens, when the instance has been migrated to a different host system.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Instance ServerQuery Flood Ban Time</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.serverquery_ban_time</key>
+                    <delay>0</delay>
+                    <units>seconds</units>
+                    <description>The time, how long a flooded ServerQuery IP address will be banned.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/instanceinfo/serverquery_ban_time)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 Instance ServerQuery Flood Commands</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.serverquery_flood_commands</key>
+                    <delay>0</delay>
+                    <description>The amount of ServerQuery commands until the server blocks the connection.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/instanceinfo/serverquery_flood_commands)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{change()}=1</expression>
+                            <name>TS3 Instance Flood Commands changed ({ITEM.LASTVALUE} =&gt; {ITEM.VALUE})</name>
+                            <priority>INFO</priority>
+                            <description>The amount of ServerQuery commands until the server blocks the connection changed.</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(#5)}&gt;80</expression>
+                            <name>TS3 Instance Flood Commands of {ITEM.VALUE} is too high</name>
+                            <priority>WARNING</priority>
+                            <description>The amount of ServerQuery commands until the server blocks the connection is too high. This might not block some connections, which should get blocked. A recommended value is 50.</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(#5)}&lt;50</expression>
+                            <name>TS3 Instance Flood Commands of {ITEM.VALUE} is too low</name>
+                            <priority>WARNING</priority>
+                            <description>The amount of ServerQuery commands until the server blocks the connection should be increased to avoid unwanted blocks. A recommended value is 50.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Instance ServerQuery Flood Time</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.serverquery_flood_time</key>
+                    <delay>0</delay>
+                    <units>seconds</units>
+                    <description>The amount of blocked (flooded) ServerQuery IP addresses, until a flooded (blocked) ServerQuery IP will be blocked for the configured ban time.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/instanceinfo/serverquery_flood_time)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(#5)}&gt;5</expression>
+                            <name>TS3 Instance Flood Time of {ITEM.VALUE} is too high</name>
+                            <priority>WARNING</priority>
+                            <description>The Flood Time is too high and might not block some clients. A recommended value is 3-5.</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(#5)}&lt;3</expression>
+                            <name>TS3 Instance Flood Time of {ITEM.VALUE} is too low</name>
+                            <priority>WARNING</priority>
+                            <description>The Flood Time is too low and might block some clients too fast. A recommended value is 3-5.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Instance ServerQuery Maximum Connections per IP Address</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.serverquery_max_connections_per_ip</key>
+                    <delay>0</delay>
+                    <units>connections</units>
+                    <description>The amount of ServerQuery clients, which can connect from the same IP address. 0 means unlimited. A too low value might block other valid ServerQuery clients.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/instanceinfo/serverquery_max_connections_per_ip)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(#5)}=0 or {last(#5)}&gt;5</expression>
+                            <name>TS3 Instance ServerQuery Maximum Connections per IP Address of {ITEM.VALUE} is too high</name>
+                            <priority>WARNING</priority>
+                            <description>The maximum ServerQuery connections per IP address is too high and might not block some evil clients. A recommended value is 5.</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(#5)}&lt;&gt;0 and {last(#5)}&lt;5</expression>
+                            <name>TS3 Instance ServerQuery Maximum Connections per IP Address of {ITEM.VALUE} is too low</name>
+                            <priority>WARNING</priority>
+                            <description>The maximum ServerQuery connections per IP address is too low and might block some valid clients. A recommended value is 5.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Instance Uptime</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.uptime</key>
+                    <delay>0</delay>
+                    <units>uptime</units>
+                    <description>The uptime of the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/hostinfo/uptime)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;300</expression>
+                            <name>TS3 Instance has been restarted</name>
+                            <priority>INFO</priority>
+                            <description>The TeamSpeak instance has been restarted and is up again since {ITEM.VALUE} seconds.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Instance Version</name>
+                    <type>DEPENDENT</type>
+                    <key>instance.version</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>The version of the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/version/version)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{change()}=1</expression>
+                            <name>TS3 Instance version changed ({ITEM.PREV} =&gt; {ITEM.LASTVALUE})</name>
+                            <priority>INFO</priority>
+                            <description>The version of the TeamSpeak instance changed. This usually happens after an upgrade of the TeamSpeak instance.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Instance ServerQuery Port reachable</name>
+                    <type>SIMPLE</type>
+                    <key>net.tcp.service[tcp, {$TS3_QUERY_IP}, {$TS3_QUERY_PORT}]</key>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(#5)}=0</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(#5)}=1</recovery_expression>
+                            <name>TS3 Instance ServerQuery port is unreachable</name>
+                            <priority>HIGH</priority>
+                            <description>The configured ServerQuery port {$TS3_QUERY_PORT} ({$TS3_QUERY_PROTOCOL}) on {$TS3_QUERY_IP} is unreachable.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 License Expiry Datetime</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>teamspeak.license_end_date[{$TS3_INSTANCE_HOME_DIR}]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>The date and time, when the license of the TeamSpeak instance approx. expires.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>TS3 License Max. Slots</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>teamspeak.license_max_slots[{$TS3_INSTANCE_HOME_DIR}]</key>
+                    <delay>1h</delay>
+                    <description>The maximum amount of slots, which are licensed to the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>TS3 License Max. Virtual Servers</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>teamspeak.license_max_virtual_servers[{$TS3_INSTANCE_HOME_DIR}]</key>
+                    <delay>1h</delay>
+                    <description>The maximum amount of virtual servers, which are licensed to the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>TS3 License Type</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>teamspeak.license_type[{$TS3_INSTANCE_HOME_DIR}]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>The license type under which the TeamSpeak instance is running.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>TS3 Process ID (PID)</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>teamspeak.process_id[{$TS3_INSTANCE_HOME_DIR}]</key>
+                    <delay>5m</delay>
+                    <description>The process ID (PID) of the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>TS3 Process ID (PID) active</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>teamspeak.process_id_active[{$TS3_INSTANCE_HOME_DIR}]</key>
+                    <delay>30s</delay>
+                    <description>True (1), when the current process ID (PID) of the TeamSpeak instance is an active Linux process.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(#3)}=0</expression>
+                            <name>TS3 Instance has been crashed</name>
+                            <priority>DISASTER</priority>
+                            <description>The process ID (PID) of the TeamSpeak instance provided by the ts3server.pid file is no active Linux process. This usually indicates, that the TeamSpeak instance is not actively running or the PID was not updated correctly.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>TS3 Latest Available Version</name>
+                    <type>HTTP_AGENT</type>
+                    <key>teamspeak_com.linux.x86_64.version</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>The latest available TeamSpeak server version.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.linux.x86_64.version</params>
+                        </step>
+                    </preprocessing>
+                    <url>https://www.teamspeak.com/versions/server.json</url>
+                    <headers>
+                        <header>
+                            <name>user-agent</name>
+                            <value>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36</value>
+                        </header>
+                    </headers>
+                    <verify_peer>YES</verify_peer>
+                    <verify_host>YES</verify_host>
+                </item>
+                <item>
+                    <name>TS3 Clients online</name>
+                    <type>DEPENDENT</type>
+                    <key>virtualserver_metrics.clientsonline_counter</key>
+                    <delay>0</delay>
+                    <units>Clients</units>
+                    <description>The sum of connected clients on all virtual servers on the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/virtualserver_metrics/clientsonline_counter)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 Virtual Server (offline)</name>
+                    <type>DEPENDENT</type>
+                    <key>virtualserver_metrics.offline_counter</key>
+                    <delay>0</delay>
+                    <units>Virtual Servers</units>
+                    <description>The amount of offline virtual servers on the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/virtualserver_metrics/offline_counter)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 Virtual Server (online)</name>
+                    <type>DEPENDENT</type>
+                    <key>virtualserver_metrics.online_counter</key>
+                    <delay>0</delay>
+                    <units>Virtual Servers</units>
+                    <description>The amount of online virtual servers on the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/virtualserver_metrics/online_counter)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 ServerQuery Clients online</name>
+                    <type>DEPENDENT</type>
+                    <key>virtualserver_metrics.queryclientsonline_counter</key>
+                    <delay>0</delay>
+                    <units>ServerQuery Clients</units>
+                    <description>The sum of connected ServerQuery clients on all virtual servers on the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/virtualserver_metrics/queryclientsonline_counter)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>TS3 Virtual Server (total)</name>
+                    <type>DEPENDENT</type>
+                    <key>virtualserver_metrics.total_counter</key>
+                    <delay>0</delay>
+                    <units>Virtual Servers</units>
+                    <description>The amount of virtual servers on the TeamSpeak instance.</description>
+                    <applications>
+                        <application>
+                            <name>TeamSpeak 3 Server</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>XMLPATH</type>
+                            <params>string(/teamspeak-instance/virtualserver_metrics/total_counter)</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_teamspeak_metrics.py[{$TS3_QUERY_IP}, {$TS3_QUERY_PORT}, {$TS3_QUERY_PROTOCOL}, {$TS3_QUERY_USER}, {$TS3_QUERY_PASSWORD}]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(#5)}=0</expression>
+                            <name>TS3 Instance has no virtual servers</name>
+                            <priority>INFO</priority>
+                            <description>The TeamSpeak instance has no virtual servers. There should be at least one virtual server.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <macros>
+                <macro>
+                    <macro>{$TS3_INSTANCE_HOME_DIR}</macro>
+                    <value>/home/teamspeak</value>
+                </macro>
+                <macro>
+                    <macro>{$TS3_QUERY_IP}</macro>
+                    <value>127.0.0.1</value>
+                </macro>
+                <macro>
+                    <macro>{$TS3_QUERY_PASSWORD}</macro>
+                </macro>
+                <macro>
+                    <macro>{$TS3_QUERY_PORT}</macro>
+                    <value>10011</value>
+                </macro>
+                <macro>
+                    <macro>{$TS3_QUERY_PROTOCOL}</macro>
+                    <value>raw</value>
+                </macro>
+                <macro>
+                    <macro>{$TS3_QUERY_USER}</macro>
+                    <value>serveradmin</value>
+                </macro>
+            </macros>
+            <screens>
+                <screen>
+                    <name>TS3 Overview</name>
+                    <hsize>2</hsize>
+                    <vsize>2</vsize>
+                </screen>
+            </screens>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <expression>{Template App TeamSpeak 3:virtualserver_metrics.clientsonline_counter.last(#5)}={Template App TeamSpeak 3:teamspeak.license_max_slots[{$TS3_INSTANCE_HOME_DIR}].last(#5)}</expression>
+            <name>TS3 Instance has no free slots</name>
+            <priority>HIGH</priority>
+            <description>All max. slots, which are licensed to the TeamSpeak instance are in use. You might want to increase the slots by using a higher license type.</description>
+        </trigger>
+        <trigger>
+            <expression>{Template App TeamSpeak 3:virtualserver_metrics.total_counter.last(#5)} = {Template App TeamSpeak 3:virtualserver_metrics.offline_counter.last(#5)}</expression>
+            <name>TS3 Instance has only stopped virtual servers</name>
+            <priority>AVERAGE</priority>
+            <description>All virtual servers on the TeamSpeak instance are offline. At least one should be online.</description>
+        </trigger>
+        <trigger>
+            <expression>{Template App TeamSpeak 3:instance.version.last()}&lt;&gt;&#13;
+{Template App TeamSpeak 3:teamspeak_com.linux.x86_64.version.last()}</expression>
+            <name>TS3 Instance is not on the latest version</name>
+            <priority>WARNING</priority>
+            <description>The TeamSpeak instance is not on the latest version. A newer version is available at teamspeak.com.</description>
+        </trigger>
+        <trigger>
+            <expression>100 * ({Template App TeamSpeak 3:virtualserver_metrics.clientsonline_counter.last(#5)} / {Template App TeamSpeak 3:teamspeak.license_max_slots[{$TS3_INSTANCE_HOME_DIR}].last(#5)})&gt;=80</expression>
+            <name>TS3 Instance reaches usage of max. slots (&gt;80 %)</name>
+            <priority>WARNING</priority>
+            <description>Nearly all slots, which are licensed to the TeamSpeak instance are in use. You might want to increase the slots by using a higher license type.</description>
+        </trigger>
+    </triggers>
+    <graphs>
+        <graph>
+            <name>TS3 Slot usage</name>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <calc_fnc>MAX</calc_fnc>
+                    <item>
+                        <host>Template App TeamSpeak 3</host>
+                        <key>virtualserver_metrics.clientsonline_counter</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <calc_fnc>MAX</calc_fnc>
+                    <item>
+                        <host>Template App TeamSpeak 3</host>
+                        <key>teamspeak.license_max_slots[{$TS3_INSTANCE_HOME_DIR}]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>2774A4</color>
+                    <calc_fnc>MAX</calc_fnc>
+                    <item>
+                        <host>Template App TeamSpeak 3</host>
+                        <key>virtualserver_metrics.queryclientsonline_counter</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+    <value_maps>
+        <value_map>
+            <name>Service state</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>Down</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Up</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>
