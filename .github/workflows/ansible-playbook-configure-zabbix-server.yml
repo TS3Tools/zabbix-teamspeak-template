@@ -1,0 +1,205 @@
+# Ansible playbook
+# Sets up a Zabbix server
+---
+- hosts: 127.0.0.1
+  connection: local
+  vars:
+    zabbix_frontend_root_dir: /usr/share/zabbix/
+    php_version: 7.4
+  become: true
+  tasks:
+    - name: update apt-cache
+      apt:
+        update_cache: yes
+
+    - name: install required packages
+      apt:
+        name:
+          - "acl" # needed for becoming unprivileged user: https://docs.ansible.com/ansible/latest/user_guide/become.html
+          - "gpg" # required to add apt keys
+          - "apt-transport-https" # required for HTTPS repository urls
+          - "python-setuptools" # required for pip
+          - "python3-pip" # required to install python modules (see next task)
+        state: latest
+
+    - name: install required python modules for ansible
+      pip:
+        name:
+          - "pymysql" # needed for mysql_ modules
+        executable: pip3
+        state: latest
+      become: yes
+      when: not ansible_check_mode
+
+    # MariaDB
+    - name: install required apt signing key for mariadb
+      ansible.builtin.apt_key:
+        url: "https://mariadb.org/mariadb_release_signing_key.asc"
+        state: present
+
+    - name: add repository source list for mariadb
+      ansible.builtin.apt_repository:
+        repo: "deb http://ftp.hosteurope.de/mirror/mariadb.org/repo/10.5/ubuntu {{ ansible_distribution_release | lower}} main"
+        state: present
+        filename: mariadb
+        update_cache: yes
+
+    - name: install dependencies for mariadb-server
+      apt:
+        name:
+          - "mariadb-client"
+          - "mariadb-server"
+        state: latest
+
+    - name: restart mariadb-server
+      systemd:
+        name: mariadb
+        state: restarted
+
+    # PHP-FPM
+    - name: install dependencies for php-fpm
+      apt:
+        name:
+          - php{{ php_version }}-fpm
+          - php{{ php_version }}-bcmath
+          - php{{ php_version }}-gd
+          - php{{ php_version }}-ldap
+          - php{{ php_version }}-mbstring
+          - php{{ php_version }}-mysql
+          - php{{ php_version }}-xml
+        state: latest
+
+    - name: restart php{{ php_version }}-fpm
+      systemd:
+        name: php{{ php_version }}-fpm
+        state: restarted
+
+    # nginx
+    - name: install dependencies for nginx
+      apt:
+        name:
+          - nginx
+        state: latest
+
+    - name: configure nginx default virtual host
+      template:
+        src: ansible-templates/nginx_zabbix_vhost.conf.j2
+        dest: "/etc/nginx/sites-available/default"
+        owner: root
+        group: root
+        mode: '644'
+
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted
+
+    # Zabbix server
+    - name: install required apt signing key for zabbix
+      ansible.builtin.apt_key:
+        id: A1848F5352D022B9471D83D0082AB56BA14FE591
+        url: https://repo.zabbix.com/zabbix-official-repo.key
+        state: present
+        validate_certs: yes
+
+    - name: add repository source list for zabbix version {{ zabbix_server_version | default('5.0') }}
+      ansible.builtin.apt_repository:
+        repo: "{{ item }}"
+        state: present
+        filename: zabbix
+        update_cache: yes
+        validate_certs: yes
+      with_items:
+        - "deb https://repo.zabbix.com/zabbix/{{ zabbix_server_version | default('5.0') }}/ubuntu/ {{ ansible_distribution_release | lower }} main"
+        - "deb-src https://repo.zabbix.com/zabbix/{{ zabbix_server_version | default('5.0') }}/ubuntu/ {{ ansible_distribution_release | lower }} main"
+
+    - name: install dependencies for zabbix server
+      apt:
+        name:
+          - "zabbix-server-mysql"
+          - "zabbix-frontend-php"
+        state: latest
+
+    - name: install sql scripts for zabbix server 5.4
+      apt:
+        name:
+          - "zabbix-sql-scripts"
+        state: latest
+      when: zabbix_server_version == "5.4"
+
+    - name: ensure that the database `zabbix` exists
+      mysql_db:
+        name: zabbix
+        encoding: utf8
+        collation: utf8_bin
+        login_host: localhost
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        state: present
+      register: zabbix_server_mysql_db
+
+    - name: ensure that the database user `zabbix` exists
+      mysql_user:
+        name: zabbix
+        password: "12345"
+        priv: 'zabbix.*:ALL'
+        login_host: localhost
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        state: present
+
+    - name: check if /usr/share/doc/zabbix-server-mysql/create.sql.gz exists
+      stat:
+        path: /usr/share/doc/zabbix-server-mysql/create.sql.gz
+      register: zabbix_server_mysql
+      changed_when: False
+
+    - name: set path to initial zabbix-server database schema and data
+      set_fact:
+        initial_db_schema_and_data_file_path: /usr/share/doc/zabbix-server-mysql/create.sql.gz
+      when: zabbix_server_mysql.stat.exists
+
+    - name: check if /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz exists
+      stat:
+        path: /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz
+      register: zabbix_sql_scripts
+      changed_when: False
+
+    - name: set path to initial zabbix-server database schema and data
+      set_fact:
+        initial_db_schema_and_data_file_path: /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz
+      when: zabbix_sql_scripts.stat.exists
+
+    - name: import initial database schema and data
+      mysql_db:
+        name: zabbix
+        encoding: utf8
+        collation: utf8_bin
+        login_host: localhost
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        state: import
+        target: "{{ initial_db_schema_and_data_file_path }}"
+      when: zabbix_server_mysql_db.changed
+
+    - name: configure zabbix_server.conf
+      lineinfile:
+        path: /etc/zabbix/zabbix_server.conf
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: "{{ item.state | default('present') }}"
+      with_items:
+        - { regexp: "^DBHost=", line: "DBHost=localhost", state: "present" }
+        - { regexp: "^DBName=", line: "DBName=zabbix", state: "present" }
+        - { regexp: "^DBUser=", line: "DBUser=zabbix", state: "present" }
+        - { regexp: "^DBPassword=", line: "DBPassword=12345", state: "present" }
+
+    - name: configure zabbix server frontend
+      template:
+        src: ansible-templates/frontend_zabbix.conf.php.j2
+        dest: /usr/share/zabbix/conf/zabbix.conf.php
+        owner: root
+        group: root
+        mode: '777'
+
+    - name: restart zabbix-server
+      systemd:
+        name: zabbix-server
+        state: restarted

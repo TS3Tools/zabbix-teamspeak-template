@@ -1,5 +1,7 @@
 # Zabbix TeamSpeak Template
 
+[![CI](https://github.com/TS3Tools/zabbix-teamspeak-template/actions/workflows/github-ci-main.yml/badge.svg)](https://github.com/TS3Tools/zabbix-teamspeak-template/actions/workflows/github-ci-main.yml)
+
 This repository allows you to monitor your TeamSpeak servers using Zabbix.
 
 > "Zabbix is a mature and effortless enterprise-class open source monitoring solution for network monitoring and application monitoring of millions of metrics." - https://www.zabbix.com/
@@ -25,7 +27,7 @@ I would like to share this with you - the community - in order to further improv
 
 ## Requirements
 
-- Zabbix server (version 5.0 or newer)
+- Zabbix server (version 5.0 or 5.2)
 - Linux based TeamSpeak server (version 3.0 or newer)
 - Linux package `sudo` on the Linux host, where the TeamSpeak server is running on
 
