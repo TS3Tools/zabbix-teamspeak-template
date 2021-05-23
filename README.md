@@ -16,6 +16,7 @@ I would like to share this with you - the community - in order to further improv
     - [Items](#items)
     - [Triggers](#triggers)
 - [Installation](#installation)
+    - [Install Python](#install-python)
     - [Configure sudo](#configure-sudo)
     - [External Scripts](#external-scripts)
     - [Templates](#templates)
@@ -78,6 +79,18 @@ Below some interesting trigger examples:
 ## Installation
 
 This section guides you through the installation of this template.
+
+### Install Python
+
+The Python script, which you will later install on the Zabbix server requires Python 3.
+
+Please install the respective Linux package:
+
+```shell
+# Example for Debian
+apt-get update
+apt-get install python3
+```
 
 ### Configure sudo
 
