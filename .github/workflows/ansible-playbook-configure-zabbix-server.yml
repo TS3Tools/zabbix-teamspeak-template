@@ -94,7 +94,7 @@
         name: nginx
         state: restarted
 
-    # Zabbix server
+    # Zabbix server + agent
     - name: install required apt signing key for zabbix
       ansible.builtin.apt_key:
         id: A1848F5352D022B9471D83D0082AB56BA14FE591
@@ -113,11 +113,12 @@
         - "deb https://repo.zabbix.com/zabbix/{{ zabbix_server_version | default('5.0') }}/ubuntu/ {{ ansible_distribution_release | lower }} main"
         - "deb-src https://repo.zabbix.com/zabbix/{{ zabbix_server_version | default('5.0') }}/ubuntu/ {{ ansible_distribution_release | lower }} main"
 
-    - name: install dependencies for zabbix server
+    - name: install dependencies for zabbix server and agent
       apt:
         name:
           - "zabbix-server-mysql"
           - "zabbix-frontend-php"
+          - "zabbix-agent"
         state: latest
 
     - name: install sql scripts for zabbix server 5.4

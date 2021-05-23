@@ -18,6 +18,7 @@ I would like to share this with you - the community - in order to further improv
 - [Installation](#installation)
     - [Install Python](#install-python)
     - [Configure sudo](#configure-sudo)
+    - [User Parameters](#user-parameters)
     - [External Scripts](#external-scripts)
     - [Templates](#templates)
 - [Configuration / Usage](#configuration-usage)
@@ -113,6 +114,27 @@ zabbix ALL=(root) NOPASSWD: /usr/bin/du -sb *
 ```
 
 PS: You might also want to add `zabbix ALL=(root) NOPASSWD: /usr/bin/nmap` to this file to allow Zabbix to run the script **Detect operating system** from the web interface. ;)
+
+### User Parameters
+
+This template also gathers some information using the active Zabbix agent. Therefore, you need to configure the required **User Parameters** on the host, where the Zabbix agent should execute some shell commands. The required user parameters by this template can be found in the [`zabbix_agentd.d/`](zabbix_agentd.d/) folder.
+
+1. Connect using SSH to your host, where your TeamSpeak server is running on
+2. Identify the path of your `Include` folder: `grep -Ei "^Include" /etc/zabbix/zabbix_agentd.conf`
+3. Install all user parameters from the [`zabbix_agentd.d/`](zabbix_agentd.d/) folder into your user parameter (`Include`) folder (default: `/etc/zabbix/zabbix_agentd.d/`)
+    ```shell
+    cd /etc/zabbix/zabbix_agentd.d/
+    wget https://raw.githubusercontent.com/TS3Tools/zabbix-teamspeak-template/main/zabbix_agentd.d/userparameter_teamspeak.conf
+    ```
+4. Ensure, that the permissions of these scripts are set correctly
+    ```shell
+    chown root:root -R /etc/zabbix/zabbix_agentd.d/
+    chmod 644 /etc/zabbix/zabbix_agentd.d/*
+    ```
+5. Restart the Zabbix agent to load the configuration of these new user parameters
+    ```shell
+    sudo systemctl restart zabbix-agent.service
+    ```
 
 ### External Scripts
 

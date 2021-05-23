@@ -10,6 +10,21 @@
   become: true
   tasks:
     # Install repository files on Zabbix server
+    - name: install zabbix user parameters
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "/etc/zabbix/zabbix_agentd.d/{{ item | basename }}"
+        owner: root
+        group: root
+        mode: '0755'
+      with_fileglob:
+        - "../../zabbix_agentd.d/*.conf"
+    
+    - name: restart zabbix-agent
+      systemd:
+        name: zabbix-agent
+        state: restarted
+
     - name: install local zabbix commands
       ansible.builtin.copy:
         src: "{{ item }}"
