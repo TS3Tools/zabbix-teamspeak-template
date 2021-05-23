@@ -1,0 +1,3 @@
+ansible==2.9.0
+jmespath==0.10.0
+zabbix-api==0.5.4

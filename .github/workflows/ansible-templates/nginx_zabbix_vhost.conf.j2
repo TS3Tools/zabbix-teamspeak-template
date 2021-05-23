@@ -1,0 +1,28 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    ###
+    ### Host specific
+    ###
+    server_name _;
+    root {{ zabbix_frontend_root_dir }};
+    index index.php index.html;
+    error_log /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log combined;
+
+    ###
+    ### PHP Settings
+    ###
+    location ~ \.php$ {
+        try_files /29f6cf4b943b2900759c7a543fd61341.htm @php;
+    }
+    location @php {
+        try_files $uri =404;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_intercept_errors on;
+    }
+}

@@ -1,0 +1,32 @@
+# Ansible playbook
+# Imports the template of this repository
+---
+- hosts: 127.0.0.1
+  connection: local
+  vars:
+    zabbix_server_api_url: http://localhost/
+    zabbix_server_api_user: "Admin"
+    zabbix_server_api_password: "zabbix"
+  become: true
+  tasks:
+    # Install repository files on Zabbix server
+    - name: install local zabbix commands
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "/usr/lib/zabbix/externalscripts/{{ item | basename }}"
+        owner: root
+        group: root
+        mode: '0755'
+      with_fileglob:
+        - "../../external_scripts/*.py"
+
+    - name: import zabbix templates
+      local_action:
+        module: community.zabbix.zabbix_template
+        server_url: "{{ zabbix_server_api_url }}"
+        login_user: "{{ zabbix_server_api_user }}"
+        login_password: "{{ zabbix_server_api_password }}"
+        template_xml: "{{ lookup('file', item) }}"
+        state: present
+      with_fileglob:
+        - "../../templates/Template*.xml"
