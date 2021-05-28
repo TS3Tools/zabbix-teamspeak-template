@@ -21,7 +21,7 @@ I would like to share this with you - the community - in order to further improv
     - [User Parameters](#user-parameters)
     - [External Scripts](#external-scripts)
     - [Templates](#templates)
-- [Configuration / Usage](#configuration-usage)
+- [Configuration / Usage](#configuration--usage)
 - [Available Macros](#available-macros)
 - [How to contribute](#how-to-contribute)
 - [Contributors](#contributors)
@@ -169,6 +169,16 @@ Next, import all Zabbix [`templates/`](templates/):
 For further information, you might want to take a look at the official Zabbix documentation: https://www.zabbix.com/documentation/current/manual/xml_export_import/templates
 
 ## Configuration / Usage
+
+First of all, you should ensure, that your IP addresses (IPv4 and IPv6, if applicable) of your Zabbix monitoring server are whitelisted for the TeamSpeak ServerQuery. Otherwise the Python script may get blocked due to too many connections and executing commands.
+
+1. Connect using SSH to your host, where a TeamSpeak server is running on
+2. Edit the ServerQuery White-/Allowlist (default: `query_ip_whitelist.txt` or `query_ip_allowlist.txt`)
+3. Ensure, that all your Zabbix server IPv4 addresses are listed in this list (eg. `192.0.2.7/32`)
+4. Ensure, that all your Zabbix server IPv6 addresses are listed in this list (eg. `2001:db8::1/128`)
+5. Save the file
+
+No restart of the TeamSpeak instance is required. TeamSpeak detects the change and automatically loads the changes.
 
 Now, you can start monitoring your TeamSpeak servers.
 
