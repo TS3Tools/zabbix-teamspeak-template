@@ -54,6 +54,3 @@ jobs:
         with:
           inventory: localhost
           playbook: .github/workflows/ansible-playbook-import-template.yml
-
-      - name: check shell script sytnax
-        run: shellcheck zabbix_agentd.d/*.sh
