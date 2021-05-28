@@ -19,6 +19,7 @@
         mode: '0755'
       with_fileglob:
         - "../../zabbix_agentd.d/*.conf"
+        - "../../zabbix_agentd.d/*.sh"
     
     - name: restart zabbix-agent
       systemd:

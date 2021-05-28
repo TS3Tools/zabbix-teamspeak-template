@@ -125,11 +125,13 @@ This template also gathers some information using the active Zabbix agent. There
     ```shell
     cd /etc/zabbix/zabbix_agentd.d/
     wget https://raw.githubusercontent.com/TS3Tools/zabbix-teamspeak-template/main/zabbix_agentd.d/userparameter_teamspeak.conf
+    wget https://raw.githubusercontent.com/TS3Tools/zabbix-teamspeak-template/main/zabbix_agentd.d/teamspeak_get_converted_license_end_date.sh
     ```
 4. Ensure, that the permissions of these scripts are set correctly
     ```shell
     chown root:root -R /etc/zabbix/zabbix_agentd.d/
-    chmod 644 /etc/zabbix/zabbix_agentd.d/*
+    chmod 644 /etc/zabbix/zabbix_agentd.d/*.conf
+    chmod 755 /etc/zabbix/zabbix_agentd.d/*.sh
     ```
 5. Restart the Zabbix agent to load the configuration of these new user parameters
     ```shell
