@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>5.0</version>
-    <date>2021-04-30T16:00:47Z</date>
+    <date>2021-05-28T15:35:56Z</date>
     <groups>
         <group>
             <name>Templates/Applications</name>
@@ -61,6 +61,12 @@
                             <name>TS3 Instance Build version changed ({ITEM.LASTVALUE} =&gt; {ITEM.VALUE})</name>
                             <priority>INFO</priority>
                             <description>The build version of the TeamSpeak instance changed. This usually happens sometimes after an upgrade of the TeamSpeak instance.</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{change()}=1</expression>
+                            <name>TS3 Instance license expiry date changed ({ITEM.PREV} =&gt; {ITEM.LASTVALUE})</name>
+                            <priority>INFO</priority>
+                            <description>The expiry date of the TeamSpeak instance license changed. This usually happens automatically regulary, when the license is still active and in use.</description>
                         </trigger>
                     </triggers>
                 </item>
@@ -543,14 +549,45 @@
                     <type>ZABBIX_ACTIVE</type>
                     <key>teamspeak.license_end_date[{$TS3_INSTANCE_HOME_DIR}]</key>
                     <delay>1h</delay>
-                    <trends>0</trends>
-                    <value_type>CHAR</value_type>
+                    <units>unixtime</units>
                     <description>The date and time, when the license of the TeamSpeak instance approx. expires.</description>
                     <applications>
                         <application>
                             <name>TeamSpeak 3 Server</name>
                         </application>
                     </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}-{now()}&lt;=0</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}-{now()}&gt;0</recovery_expression>
+                            <name>TS3 Instance license expired</name>
+                            <priority>DISASTER</priority>
+                            <description>The license of the TeamSpeak instance expired. Your TeamSpeak instance is now limited to the default amount of maximum virtual servers and slots.&#13;
+&#13;
+TeamSpeak usually automatically renews the license 30 days prior to the expiration date, when it's still activley in use and the license fee is paid. Depending on the license you might also need to replace your license with a newer one.</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}-{now()}&lt;1209600</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}-{now()}&gt;1209600 or {last()}-{now()}&lt;=0</recovery_expression>
+                            <name>TS3 Instance license expires soon (&lt;14 days)</name>
+                            <priority>HIGH</priority>
+                            <description>The license of the TeamSpeak instance expires in less than 14 days.&#13;
+&#13;
+TeamSpeak usually automatically renews the license 30 days prior to the expiration date, when it's still activley in use and the license fee is paid. Depending on the license you might also need to replace your license with a newer one.</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}-{now()}&lt;2160000</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}-{now()}&gt;2160000 or {last()}-{now()}&lt;1209600</recovery_expression>
+                            <name>TS3 Instance license expires soon (&lt;25 days)</name>
+                            <priority>WARNING</priority>
+                            <description>The license of the TeamSpeak instance expires in less than 25 days.&#13;
+&#13;
+TeamSpeak usually automatically renews the license 30 days prior to the expiration date, when it's still activley in use and the license fee is paid. Depending on the license you might also need to replace your license with a newer one.</description>
+                        </trigger>
+                    </triggers>
                 </item>
                 <item>
                     <name>TS3 License Max. Slots</name>
