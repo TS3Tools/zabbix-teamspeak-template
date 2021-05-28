@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>5.0</version>
-    <date>2021-05-28T15:35:56Z</date>
+    <date>2021-05-28T15:45:00Z</date>
     <groups>
         <group>
             <name>Templates/Applications</name>
@@ -481,10 +481,10 @@
                     </master_item>
                     <triggers>
                         <trigger>
-                            <expression>{last()}&lt;300</expression>
-                            <name>TS3 Instance has been restarted</name>
+                            <expression>{last()}&lt;600</expression>
+                            <name>TS3 Instance has been restarted (uptime &lt; 10m)</name>
                             <priority>INFO</priority>
-                            <description>The TeamSpeak instance has been restarted and is up again since {ITEM.VALUE} seconds.</description>
+                            <description>The TeamSpeak instance has been restarted and is up again since less than 10 minutes.</description>
                         </trigger>
                     </triggers>
                 </item>
