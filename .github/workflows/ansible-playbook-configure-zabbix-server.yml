@@ -20,7 +20,6 @@
           - "apt-transport-https" # required for HTTPS repository urls
           - "python-setuptools" # required for pip
           - "python3-pip" # required to install python modules (see next task)
-          - "shellcheck" # required for checking the syntax of shell scripts
         state: latest
 
     - name: install required python modules for ansible
