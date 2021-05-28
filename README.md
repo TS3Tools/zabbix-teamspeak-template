@@ -21,7 +21,7 @@ I would like to share this with you - the community - in order to further improv
     - [User Parameters](#user-parameters)
     - [External Scripts](#external-scripts)
     - [Templates](#templates)
-- [Configuration / Usage](#configuration-usage)
+- [Configuration / Usage](#configuration--usage)
 - [Available Macros](#available-macros)
 - [How to contribute](#how-to-contribute)
 - [Contributors](#contributors)
