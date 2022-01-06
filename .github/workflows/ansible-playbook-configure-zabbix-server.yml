@@ -30,31 +30,6 @@
         state: latest
       when: not ansible_check_mode
 
-    # MariaDB
-    - name: install required apt signing key for mariadb
-      ansible.builtin.apt_key:
-        url: "https://mariadb.org/mariadb_release_signing_key.asc"
-        state: present
-
-    - name: add repository source list for mariadb
-      ansible.builtin.apt_repository:
-        repo: "deb http://ftp.hosteurope.de/mirror/mariadb.org/repo/10.5/ubuntu {{ ansible_distribution_release | lower}} main"
-        state: present
-        filename: mariadb
-        update_cache: yes
-
-    - name: install dependencies for mariadb-server
-      apt:
-        name:
-          - "mariadb-client"
-          - "mariadb-server"
-        state: latest
-
-    - name: restart mariadb-server
-      systemd:
-        name: mariadb
-        state: restarted
-
     # PHP-FPM
     - name: install dependencies for php-fpm
       apt:
@@ -130,10 +105,10 @@
     - name: ensure that the database `zabbix` exists
       mysql_db:
         name: zabbix
-        encoding: utf8
-        collation: utf8_bin
+        encoding: utf8mb4
+        collation: utf8mb4_bin
         login_host: localhost
-        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_user: root
         state: present
       register: zabbix_server_mysql_db
 
@@ -143,7 +118,7 @@
         password: "12345"
         priv: 'zabbix.*:ALL'
         login_host: localhost
-        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_user: root
         state: present
 
     - name: check if /usr/share/doc/zabbix-server-mysql/create.sql.gz exists
@@ -171,10 +146,10 @@
     - name: import initial database schema and data
       mysql_db:
         name: zabbix
-        encoding: utf8
-        collation: utf8_bin
+        encoding: utf8mb4
+        collation: utf8mb4_bin
         login_host: localhost
-        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_user: root
         state: import
         target: "{{ initial_db_schema_and_data_file_path }}"
       when: zabbix_server_mysql_db.changed
