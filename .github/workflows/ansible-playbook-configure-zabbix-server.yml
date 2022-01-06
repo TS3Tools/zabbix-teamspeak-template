@@ -6,7 +6,7 @@
   vars:
     zabbix_frontend_root_dir: /usr/share/zabbix/
     php_version: 7.4
-  become: true
+  become: yes
   tasks:
     - name: update apt-cache
       apt:
@@ -28,7 +28,6 @@
           - "pymysql" # needed for mysql_ modules
         executable: pip3
         state: latest
-      become: yes
       when: not ansible_check_mode
 
     # MariaDB
