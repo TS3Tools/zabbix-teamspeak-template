@@ -1,11 +1,13 @@
-name: main
+name: Tests
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+  pull_request:
 
 jobs:
-  test:
+  tests:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
@@ -19,6 +21,18 @@ jobs:
     steps:
       - name: show operating system information
         run: lsb_release -a
+
+      - name: shutdown ubuntu default mysqld
+        run: sudo systemctl stop mysql.service
+
+      - name: set up mariadb
+        uses: getong/mariadb-action@v1.1
+        with:
+          host port: 3306
+          container port: 3306
+          character set server: 'utf8mb4'
+          collation server: 'utf8mb4_general_ci'
+          mariadb version: '10.5'
 
       - uses: actions/checkout@v2
 

@@ -1,6 +1,6 @@
 # Zabbix TeamSpeak Template
 
-[![CI](https://github.com/TS3Tools/zabbix-teamspeak-template/actions/workflows/github-ci-main.yml/badge.svg)](https://github.com/TS3Tools/zabbix-teamspeak-template/actions/workflows/github-ci-main.yml)
+[![CI Tests](https://github.com/TS3Tools/zabbix-teamspeak-template/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/TS3Tools/zabbix-teamspeak-template/actions/workflows/tests.yml)
 
 This repository allows you to monitor your TeamSpeak servers using Zabbix.
 
